@@ -89,13 +89,27 @@ const uid=()=>crypto.randomUUID();
 const f=n=>Number(n||0).toFixed(2);
 
 const groups=[
- ["OTE",["1x OTE","2x OTE","Double OTE / OTE-Overlap"]],
- ["Standard Deviations",["+1 SD","-1 SD","+2 SD","-2 SD","+3 SD","-3 SD","SD direkt auf dem Level"]],
- ["Volume / Auction",["POC","VAH","VAL"]],
- ["Price Action",["Absorption","Wick Reaction","Liquidity Sweep","CHoCH","BOS"]],
- ["New York Openings",["Midnight Open","8 AM Open","12 PM Open"]]
+  ["Key Levels",[
+    "Midnight Open",
+    "8 AM Open",
+    "12 PM Open",
+    "POC",
+    "VAH",
+    "VAL"
+  ]],
+  ["Standard Deviation",[
+    "SD stimmt mit dem Level überein",
+    "SD stimmt nicht mit dem Level überein"
+  ]],
+  ["OTE",[
+    "1x OTE",
+    "2x OTE"
+  ]],
+  ["Marktstruktur",[
+    "BOS",
+    "CHoCH"
+  ]]
 ];
-
 let data={accounts:[{id:"paper",name:"Paper Account",market:"Mixed"}],trades:[]};
 let page="dashboard",editId=null,filter="all",sb=null,user=null;
 
