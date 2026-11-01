@@ -1,27 +1,316 @@
-<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EDGEBOOK Journal</title>
+
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EDGEBOOK Journal</title>
 <style>
-:root{--bg:#0b0f16;--p:#121a26;--p2:#182334;--line:#29374a;--txt:#eef3fa;--muted:#94a3b8;--blue:#8fb2ff;--green:#45d6a2;--red:#ff7488}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:14px system-ui}button,input,select,textarea{font:inherit}button{background:var(--p2);border:1px solid var(--line);color:var(--txt);padding:9px 12px;border-radius:9px;cursor:pointer}button.primary{background:var(--blue);color:#08111f;border:0;font-weight:700}.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}.side{padding:22px 14px;background:#0e141e;border-right:1px solid var(--line)}.brand{font-weight:900;letter-spacing:2px;font-size:19px;padding:5px 10px 22px}.brand span{color:var(--blue)}nav{display:grid;gap:5px}nav button{text-align:left;background:transparent;border-color:transparent;color:var(--muted)}nav button.active{background:var(--p2);color:var(--txt);border-color:var(--line)}main{padding:26px;max-width:1450px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}.eyebrow,.section{color:var(--blue);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase}h1{font-size:27px;margin:3px 0}h2{font-size:16px;margin:0 0 14px}.muted{color:var(--muted)}.small{font-size:12px}.grid{display:grid;gap:13px}.stats{grid-template-columns:repeat(4,1fr);margin-bottom:14px}.cols{grid-template-columns:1.2fr .8fr}.card{background:var(--p);border:1px solid var(--line);border-radius:14px;padding:17px;min-width:0}.metric{font-size:27px;font-weight:850;margin:5px 0}.green{color:var(--green)}.red{color:var(--red)}.formgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}.field{display:grid;gap:5px}.field label{color:var(--muted);font-size:12px}.field input,.field select,.field textarea,select.global{background:#0b111a;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:10px;width:100%;min-width:0}.field textarea{min-height:75px}.wide{grid-column:1/-1}.checks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.check{display:flex;gap:8px;padding:9px;background:#0c1420;border:1px solid var(--line);border-radius:8px}.check input{accent-color:var(--blue)}.section{margin:18px 0 9px}.row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.between{justify-content:space-between}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;white-space:nowrap}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);font-size:12px}th{color:var(--muted)}.notice{padding:11px;background:#18263b;border:1px solid #304d78;border-radius:9px;color:#d5e2fa;margin:10px 0}.warning{background:#2a2418;border-color:#594927;color:#f3dca8}.empty{text-align:center;padding:25px;color:var(--muted)}.pill{font-size:11px;border:1px solid var(--line);border-radius:99px;padding:4px 8px;color:var(--muted)}.actions{display:flex;gap:7px;flex-wrap:wrap}.hidden{display:none}.chart{height:120px;display:flex;align-items:end;gap:5px;padding-top:10px}.chart i{flex:1;background:var(--blue);border-radius:4px 4px 0 0;min-width:3px}.chart i.neg{background:var(--red)}@media(max-width:850px){.app{grid-template-columns:1fr}.side{border:0;border-bottom:1px solid var(--line);padding:12px}.brand{padding:2px 8px 10px}nav{display:flex;overflow:auto}nav button{white-space:nowrap}main{padding:15px}.stats{grid-template-columns:repeat(2,1fr)}.cols{grid-template-columns:1fr}.formgrid,.checks{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.formgrid,.checks{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}}
-</style></head><body><div id="root"></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
-const CONFIG={SUPABASE_URL:"https://eahqzqtlorgvnfrqxjmn.supabase.co",SUPABASE_ANON_KEY:"HIER_DEIN_SUPABASE_ANON_PUBLIC_KEY_EINTRAGEN"};
-const $=s=>document.querySelector(s),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])),uid=()=>crypto.randomUUID(),f=n=>Number(n||0).toFixed(2);
-const groups=[["OTE",["1x OTE","2x OTE","Double OTE / OTE-Overlap"]],["Standard Deviations",["+1 SD","-1 SD","+2 SD","-2 SD","+3 SD","-3 SD","SD direkt auf dem Level"]],["Volume / Auction",["POC","VAH","VAL"]],["Price Action",["Absorption","Wick Reaction","Liquidity Sweep","CHoCH","BOS"]],["New York Openings",["Midnight Open","8 AM Open","12 PM Open"]]];
-let data={accounts:[{id:"paper",name:"Paper Account",market:"Mixed"}],trades:[]},page="dashboard",editId=null,filter="all",sb=null,user=null;
-function load(){try{data=JSON.parse(localStorage.getItem("edgebook")||"null")||data}catch{}}
+:root{--bg:#0b0f16;--p:#121a26;--p2:#182334;--line:#29374a;--txt:#eef3fa;--muted:#94a3b8;--blue:#8fb2ff;--green:#45d6a2;--red:#ff7488}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font:14px system-ui}
+button,input,select,textarea{font:inherit}
+button{background:var(--p2);border:1px solid var(--line);color:var(--txt);padding:9px 12px;border-radius:9px;cursor:pointer}
+button.primary{background:var(--blue);color:#08111f;border:0;font-weight:700}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.side{padding:22px 14px;background:#0e141e;border-right:1px solid var(--line)}
+.brand{font-weight:900;letter-spacing:2px;font-size:19px;padding:5px 10px 22px}
+.brand span{color:var(--blue)}
+nav{display:grid;gap:5px}
+nav button{text-align:left;background:transparent;border-color:transparent;color:var(--muted)}
+nav button.active{background:var(--p2);color:var(--txt);border-color:var(--line)}
+main{padding:26px;max-width:1450px;width:100%;margin:auto}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}
+.eyebrow,.section{color:var(--blue);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase}
+h1{font-size:27px;margin:3px 0}
+h2{font-size:16px;margin:0 0 14px}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.grid{display:grid;gap:13px}
+.stats{grid-template-columns:repeat(4,1fr);margin-bottom:14px}
+.cols{grid-template-columns:1.2fr .8fr}
+.card{background:var(--p);border:1px solid var(--line);border-radius:14px;padding:17px;min-width:0}
+.metric{font-size:27px;font-weight:850;margin:5px 0}
+.green{color:var(--green)}
+.red{color:var(--red)}
+.formgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.field{display:grid;gap:5px}
+.field label{color:var(--muted);font-size:12px}
+.field input,.field select,.field textarea,select.global{background:#0b111a;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:10px;width:100%;min-width:0}
+.field textarea{min-height:75px}
+.wide{grid-column:1/-1}
+.checks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.check{display:flex;gap:8px;padding:9px;background:#0c1420;border:1px solid var(--line);border-radius:8px}
+.check input{accent-color:var(--blue)}
+.section{margin:18px 0 9px}
+.row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.between{justify-content:space-between}
+.tablewrap{overflow:auto}
+table{border-collapse:collapse;width:100%;white-space:nowrap}
+th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);font-size:12px}
+th{color:var(--muted)}
+.notice{padding:11px;background:#18263b;border:1px solid #304d78;border-radius:9px;color:#d5e2fa;margin:10px 0}
+.warning{background:#2a2418;border-color:#594927;color:#f3dca8}
+.empty{text-align:center;padding:25px;color:var(--muted)}
+.actions{display:flex;gap:7px;flex-wrap:wrap}
+.chart{height:120px;display:flex;align-items:end;gap:5px;padding-top:10px}
+.chart i{flex:1;background:var(--blue);border-radius:4px 4px 0 0;min-width:3px}
+.chart i.neg{background:var(--red)}
+@media(max-width:850px){
+.app{grid-template-columns:1fr}
+.side{border:0;border-bottom:1px solid var(--line);padding:12px}
+.brand{padding:2px 8px 10px}
+nav{display:flex;overflow:auto}
+nav button{white-space:nowrap}
+main{padding:15px}
+.stats{grid-template-columns:repeat(2,1fr)}
+.cols{grid-template-columns:1fr}
+.formgrid,.checks{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:520px){
+.formgrid,.checks{grid-template-columns:1fr}
+.top{align-items:flex-start;flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const CONFIG={
+ SUPABASE_URL:"https://eahqzqtlorgvnfrqxjmn.supabase.co",
+ SUPABASE_ANON_KEY:"sb_publishable_Xj6KH7W2TE39MGozBZJFVA_0-4tVvyD"
+};
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid=()=>crypto.randomUUID();
+const f=n=>Number(n||0).toFixed(2);
+
+const groups=[
+ ["OTE",["1x OTE","2x OTE","Double OTE / OTE-Overlap"]],
+ ["Standard Deviations",["+1 SD","-1 SD","+2 SD","-2 SD","+3 SD","-3 SD","SD direkt auf dem Level"]],
+ ["Volume / Auction",["POC","VAH","VAL"]],
+ ["Price Action",["Absorption","Wick Reaction","Liquidity Sweep","CHoCH","BOS"]],
+ ["New York Openings",["Midnight Open","8 AM Open","12 PM Open"]]
+];
+
+let data={accounts:[{id:"paper",name:"Paper Account",market:"Mixed"}],trades:[]};
+let page="dashboard",editId=null,filter="all",sb=null,user=null;
+
+function load(){
+ try{data=JSON.parse(localStorage.getItem("edgebook")||"null")||data}catch(e){}
+}
 function save(){localStorage.setItem("edgebook",JSON.stringify(data))}
 function chosen(){return data.trades.filter(t=>filter==="all"||t.account===filter)}
-function stats(ts){let w=ts.filter(t=>+t.r>0),l=ts.filter(t=>+t.r<0),sum=ts.reduce((s,t)=>s+(+t.r||0),0),gw=w.reduce((s,t)=>s+(+t.r),0),gl=Math.abs(l.reduce((s,t)=>s+(+t.r),0));return{n:ts.length,w:w.length,l:l.length,wr:ts.length?w.length/ts.length*100:0,sum,exp:ts.length?sum/ts.length:0,pf:gl?gw/gl:gw?Infinity:0}}
+function stats(ts){
+ let w=ts.filter(t=>+t.r>0),l=ts.filter(t=>+t.r<0);
+ let sum=ts.reduce((s,t)=>s+(+t.r||0),0);
+ let gw=w.reduce((s,t)=>s+(+t.r),0);
+ let gl=Math.abs(l.reduce((s,t)=>s+(+t.r),0));
+ return {n:ts.length,w:w.length,l:l.length,wr:ts.length?w.length/ts.length*100:0,sum,exp:ts.length?sum/ts.length:0,pf:gl?gw/gl:gw?Infinity:0};
+}
 function acc(id){return data.accounts.find(a=>a.id===id)?.name||"—"}
-function metric(a,b,c,good=true){return `<div class="card"><div class="muted small">${a}</div><div class="metric ${good?"green":"red"}">${b}</div><div class="muted small">${c||""}</div></div>`}
-function table(ts){return `<div class="tablewrap"><table><thead><tr><th>Datum</th><th>Markt</th><th>Setup</th><th>Konto</th><th>Confluences</th><th>Ergebnis</th><th></th></tr></thead><tbody>${ts.map(t=>`<tr><td>${esc(t.date)}</td><td>${esc(t.market)}</td><td>${esc(t.setup||"—")}</td><td>${esc(acc(t.account))}</td><td>${(t.conf||[]).length}</td><td class="${+t.r>=0?"green":"red"}">${f(t.r)}R</td><td><button data-edit="${t.id}">Bearbeiten</button></td></tr>`).join("")}</tbody></table></div>`}
-function dash(){let ts=chosen(),s=stats(ts),sorted=ts.slice().sort((a,b)=>a.date.localeCompare(b.date));let cum=0,vals=sorted.map(t=>cum+=(+t.r||0)),max=Math.max(1,...vals.map(Math.abs));return `<div class="grid stats">${metric("Trades",s.n,"dokumentiert")}${metric("Winrate",f(s.wr)+"%",`${s.w} Wins · ${s.l} Losses`)}${metric("Netto",f(s.sum)+"R","kumuliertes Ergebnis",s.sum>=0)}${metric("Expectancy",f(s.exp)+"R","Ø Ergebnis pro Trade",s.exp>=0)}</div><div class="grid cols"><div class="card"><div class="row between"><h2>Letzte Trades</h2><button data-page="trades">Alle Trades</button></div>${ts.length?table(ts.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,7)):'<div class="empty">Noch keine Trades erfasst.</div>'}</div><div class="card"><h2>Weitere Kennzahlen</h2><p class="row between"><span class="muted">Profit Factor</span><b>${s.pf===Infinity?"∞":f(s.pf)}</b></p><p class="row between"><span class="muted">Ø Gewinn</span><b class="green">${f(s.w?ts.filter(t=>+t.r>0).reduce((a,t)=>a+(+t.r),0)/s.w:0)}R</b></p><p class="row between"><span class="muted">Ø Verlust</span><b class="red">${f(s.l?ts.filter(t=>+t.r<0).reduce((a,t)=>a+(+t.r),0)/s.l:0)}R</b></p><div class="notice warning small">Historische Statistik, keine Vorhersage und keine Garantie.</div><button class="primary" data-page="new">＋ Trade erfassen</button></div></div><div class="card" style="margin-top:14px"><h2>Equity-Kurve · kumuliertes R</h2>${vals.length?`<div class="chart">${vals.slice(-50).map(v=>`<i class="${v<0?"neg":""}" style="height:${Math.max(3,Math.abs(v)/max*100)}%" title="${f(v)}R"></i>`).join("")}</div>`:'<div class="empty">Noch keine Daten.</div>'}</div>`}
-function form(){let t=data.trades.find(x=>x.id===editId)||{},has=new Set(t.conf||[]),ctx=new Set(t.context||[]);let field=(label,name,type="text",value="")=>`<div class="field"><label>${label}</label><input name="${name}" type="${type}" value="${esc(value)}"></div>`;return `<div class="card"><form id="tradeForm"><div class="formgrid">${field("Datum","date","date",t.date||new Date().toISOString().slice(0,10))}<div class="field"><label>Konto</label><select name="account">${data.accounts.map(a=>`<option value="${a.id}" ${t.account===a.id?"selected":""}>${esc(a.name)}</option>`).join("")}</select></div>${field("Markt / Symbol","market","text",t.market||"NASDAQ")}${field("Session / NY-Zeit","session","text",t.session||"")}${field("Richtung","direction","text",t.direction||"Long")}${field("Setup","setup","text",t.setup||"")}${field("Entry (optional)","entry","number",t.entry||"")}${field("Stop (optional)","stop","number",t.stop||"")}${field("Take Profit (optional)","tp","number",t.tp||"")}${field("Ergebnis in R","r","number",t.r??"0")}${field("Bias","bias","text",t.bias||"Unklar")}${field("Risiko geplant (R)","risk","number",t.risk||"1")}</div><div class="section">Deine Level-Confluences</div>${groups.map(([g,items])=>`<div class="section">${g}</div><div class="checks">${items.map(i=>`<label class="check"><input type="checkbox" name="conf" value="${esc(i)}" ${has.has(i)?"checked":""}><span>${esc(i)}</span></label>`).join("")}</div>`).join("")}<div class="section">Struktur & Trade-Status</div><div class="checks">${["HTF Bias bestätigt","5M–15M Struktur bestätigt","1M Entry-Trigger","Reaktion am Level","Opening Times stimmen überein","Regeln eingehalten","No-Fill / hypothetisch"].map(i=>`<label class="check"><input type="checkbox" name="context" value="${i}" ${ctx.has(i)?"checked":""}><span>${i}</span></label>`).join("")}</div><div class="formgrid" style="margin-top:14px"><div class="field wide"><label>Screenshot-Link (optional)</label><input name="screenshot" value="${esc(t.screenshot||"")}" placeholder="Link zum Chart"></div><div class="field wide"><label>Notizen / Analyse</label><textarea name="notes">${esc(t.notes||"")}</textarea></div><div class="field wide"><label>Learning / Verbesserung</label><textarea name="lesson">${esc(t.lesson||"")}</textarea></div></div><div class="row" style="margin-top:15px"><button class="primary">Trade speichern</button><button type="button" id="cancel">Abbrechen</button></div></form></div>`}
-function analytics(){let ts=chosen(),s=stats(ts),names=[...new Set(ts.flatMap(t=>t.conf||[]))],rows=names.map(n=>{let x=ts.filter(t=>(t.conf||[]).includes(n)),z=stats(x);return{n,...z}}).sort((a,b)=>b.wr-a.wr);let map={};ts.forEach(t=>{let k=(t.conf||[]).slice().sort().join(" + ");if(k)(map[k]||=[]).push(t)});let combos=Object.entries(map).map(([n,x])=>({n,...stats(x)})).filter(x=>x.n>1).sort((a,b)=>b.n-a.n);return `<div class="grid stats">${metric("Stichprobe",s.n,"Trades")}${metric("Winrate",f(s.wr)+"%","historisch")}${metric("Expectancy",f(s.exp)+"R","Ø pro Trade")}${metric("Profit Factor",s.pf===Infinity?"∞":f(s.pf),"historisch")}</div><div class="notice warning">Eine Trefferquote von 80 % bedeutet nur, dass 80 % deiner bisher erfassten passenden Trades gewonnen haben. Beispiel: 4 von 5 ist eine sehr kleine Stichprobe und keine belastbare Prognose. No-Fills/hypothetische Trades getrennt auswerten.</div><div class="card"><h2>Einzelne Confluences</h2>${rows.length?`<div class="tablewrap"><table><tr><th>Confluence</th><th>Trades</th><th>Wins</th><th>Winrate</th><th>Ø R</th><th>Netto R</th></tr>${rows.map(x=>`<tr><td>${esc(x.n)}</td><td>${x.n===undefined?"":x.n}</td><td>${x.w}</td><td>${f(x.wr)}%</td><td>${f(x.exp)}R</td><td>${f(x.sum)}R</td></tr>`).join("")}</table></div>`:'<div class="empty">Noch keine Daten.</div>'}</div><div class="card" style="margin-top:14px"><h2>Kombinationen (mindestens 2 Trades)</h2>${combos.length?`<div class="tablewrap"><table><tr><th>Kombination</th><th>Trades</th><th>Wins</th><th>Winrate</th><th>Ø R</th><th>Netto R</th></tr>${combos.map(x=>`<tr><td style="white-space:normal;min-width:220px">${esc(x.n)}</td><td>${x.n}</td><td>${x.w}</td><td>${f(x.wr)}%</td><td>${f(x.exp)}R</td><td>${f(x.sum)}R</td></tr>`).join("")}</table></div>`:'<div class="empty">Noch keine wiederholten Kombinationen.</div>'}</div>`}
-function accounts(){return `<div class="grid cols"><div class="card"><h2>Deine Konten</h2>${data.accounts.map(a=>`<p class="row between"><span><b>${esc(a.name)}</b> <span class="muted">${esc(a.market)}</span></span><button data-del="${a.id}" ${data.accounts.length===1?"disabled":""}>Löschen</button></p>`).join("")}</div><div class="card"><h2>Konto hinzufügen</h2><form id="accountForm" class="grid"><div class="field"><label>Name</label><input name="name" required placeholder="z. B. NASDAQ Backtest"></div><div class="field"><label>Markt</label><input name="market" placeholder="NASDAQ / ES / BTC"></div><button class="primary">Hinzufügen</button></form></div></div>`}
-function settings(){return `<div class="grid cols"><div class="card"><h2>Backup</h2><p class="muted">JSON sichert Konten und Trades; CSV exportiert Trades.</p><div class="actions"><button id="json">JSON exportieren</button><button id="csv">CSV exportieren</button><button id="importBtn">JSON importieren</button><input id="import" type="file" accept=".json" hidden></div></div><div class="card"><h2>Supabase Login & Cloud Sync</h2><div class="notice">${sb?"Supabase Projekt-URL ist eingetragen.":"Projekt-ID wurde eingesetzt; für Login fehlt noch dein anon/public Key."}</div><div class="field"><label>E-Mail</label><input id="email" type="email"></div><div class="field"><label>Passwort</label><input id="password" type="password"></div><div class="actions" style="margin-top:10px"><button id="signup" ${!sb?"disabled":""}>Registrieren</button><button id="login" ${!sb?"disabled":""}>Login</button><button id="logout" ${!user?"disabled":""}>Logout</button><button id="sync" ${!user?"disabled":""}>Sync</button></div><p class="muted small">${user?"Angemeldet: "+esc(user.email):"Nicht angemeldet"}</p></div></div><div class="card" style="margin-top:14px"><h2>Supabase Setup</h2><ol class="muted"><li>In Supabase SQL Editor die Datei <code>supabase-schema.sql</code> ausführen.</li><li>In <code>index.html</code> bei <code>SUPABASE_ANON_KEY</code> den anon/public key eintragen.</li><li>Supabase Auth: GitHub-Pages-URL in Site URL und Redirect URLs eintragen.</li><li>Die Website auf GitHub Pages veröffentlichen.</li></ol><p class="small muted">Niemals den service_role key in die Website schreiben. Für Minderjährige Cloud-Konten nur mit Unterstützung/Zustimmung eines Erziehungsberechtigten einrichten.</p></div>`}
-function render(){let title={dashboard:"Dashboard",new:editId?"Trade bearbeiten":"Trade dokumentieren",trades:"Trade-Historie",analytics:"Confluence Analytics",accounts:"Konten",settings:"Einstellungen"}[page];$("#root").innerHTML=`<div class="app"><aside class="side"><div class="brand">EDGE<span>BOOK</span></div><nav>${[["dashboard","Dashboard"],["new","＋ Trade erfassen"],["trades","Trade-Historie"],["analytics","Analytics"],["accounts","Konten"],["settings","Einstellungen"]].map(([p,n])=>`<button data-page="${p}" class="${p===page?"active":""}">${n}</button>`).join("")}</nav></aside><main><div class="top"><div><div class="eyebrow">Trading journal workspace</div><h1>${title}</h1></div><select class="global" id="filter"><option value="all">Alle Konten</option>${data.accounts.map(a=>`<option value="${a.id}" ${filter===a.id?"selected":""}>${esc(a.name)}</option>`).join("")}</select></div>${({dashboard:dash,new:form,trades:()=>`<div class="card"><div class="row between"><h2>Dokumentierte Trades</h2><button class="primary" data-page="new">＋ Neu</button></div>${chosen().length?table(chosen().slice().sort((a,b)=>b.date.localeCompare(a.date))):'<div class="empty">Noch keine Trades.</div>'}</div>`,analytics,accounts,settings})[page]()}</main></div>`;document.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>{page=b.dataset.page;editId=null;render()});$("#filter").onchange=e=>{filter=e.target.value;render()};document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>{editId=b.dataset.edit;page="new";render()});bind()}
-function bind(){let tf=$("#tradeForm");tf?.addEventListener("submit",e=>{e.preventDefault();let fd=new FormData(tf),t=Object.fromEntries(fd.entries());t.conf=fd.getAll("conf");t.context=fd.getAll("context");t.r=Number(t.r);t.risk=Number(t.risk||1);t.id=editId||uid();let i=data.trades.findIndex(x=>x.id===t.id);if(i<0)data.trades.push(t);else data.trades[i]=t;save();editId=null;page="trades";render();if(user)sync();});$("#cancel")?.addEventListener("click",()=>{editId=null;page="trades";render()});$("#accountForm")?.addEventListener("submit",e=>{e.preventDefault();let fd=new FormData(e.target);data.accounts.push({id:uid(),name:fd.get("name"),market:fd.get("market")});save();render()});document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{if(data.accounts.length<2)return;if(!confirm("Konto und seine Trades löschen?"))return;data.accounts=data.accounts.filter(a=>a.id!==b.dataset.del);data.trades=data.trades.filter(t=>t.account!==b.dataset.del);save();render()});$("#json")?.addEventListener("click",()=>download("edgebook-backup.json",JSON.stringify(data,null,2),"application/json"));$("#csv")?.addEventListener("click",()=>{let ks=["date","market","setup","direction","bias","r","account","session","conf","context","notes","lesson"];let s=[ks.join(","),...data.trades.map(t=>ks.map(k=>'"'+String(Array.isArray(t[k])?t[k].join("; "):t[k]||"").replace(/"/g,'""')+'"').join(","))].join("\n");download("edgebook-trades.csv",s,"text/csv")});$("#importBtn")?.addEventListener("click",()=>$("#import").click());$("#import")?.addEventListener("change",async e=>{try{let d=JSON.parse(await e.target.files[0].text());if(!d.accounts||!d.trades)throw Error();if(confirm("Lokale Daten durch Backup ersetzen?")){data=d;save();render()}}catch{alert("Backup ungültig")}});$("#signup")?.addEventListener("click",async()=>{let {error}=await sb.auth.signUp({email:$("#email").value,password:$("#password").value});alert(error?.message||"Registrierung gestartet. E-Mail prüfen.")});$("#login")?.addEventListener("click",async()=>{let {data:d,error}=await sb.auth.signInWithPassword({email:$("#email").value,password:$("#password").value});if(error)alert(error.message);else{user=d.user;await sync();render()}});$("#logout")?.addEventListener("click",async()=>{await sb.auth.signOut();user=null;render()});$("#sync")?.addEventListener("click",sync)}
-function download(name,s,type){let a=document.createElement("a"),u=URL.createObjectURL(new Blob([s],{type}));a.href=u;a.download=name;a.click();URL.revokeObjectURL(u)}
-async function sync(){if(!sb||!user)return;try{let {data:d,error}=await sb.from("edgebook_data").select("payload").eq("user_id",user.id).maybeSingle();if(error)throw error;if(d?.payload){if(confirm("Cloud-Daten laden? OK = Cloud laden, Abbrechen = lokale Daten hochladen.")){data=d.payload;localStorage.setItem("edgebook",JSON.stringify(data));render();return}}let {error:e}=await sb.from("edgebook_data").upsert({user_id:user.id,payload:data,updated_at:new Date().toISOString()});if(e)throw e;alert("Cloud synchronisiert")}catch(e){alert("Sync-Fehler: "+e.message)}}
-load();if(CONFIG.SUPABASE_URL&&CONFIG.SUPABASE_ANON_KEY!==sb_publishable_Xj6KH7W2TE39MGozBZJFVA_0-4tVvyD&&window.supabase){sb=window.supabase.createClient(CONFIG.SUPABASE_URL,CONFIG.SUPABASE_ANON_KEY);sb.auth.getUser().then(({data:d})=>{user=d.user;render()})}render();
-</script></body></html>
+function metric(a,b,c,good=true){
+ return `<div class="card"><div class="muted small">${a}</div><div class="metric ${good?"green":"red"}">${b}</div><div class="muted small">${c||""}</div></div>`;
+}
+function table(ts){
+ return `<div class="tablewrap"><table><thead><tr><th>Datum</th><th>Markt</th><th>Setup</th><th>Konto</th><th>Confluences</th><th>Ergebnis</th><th></th></tr></thead><tbody>
+ ${ts.map(t=>`<tr><td>${esc(t.date)}</td><td>${esc(t.market)}</td><td>${esc(t.setup||"—")}</td><td>${esc(acc(t.account))}</td><td>${(t.conf||[]).length}</td><td class="${+t.r>=0?"green":"red"}">${f(t.r)}R</td><td><button data-edit="${t.id}">Bearbeiten</button></td></tr>`).join("")}
+ </tbody></table></div>`;
+}
+function dash(){
+ let ts=chosen(),s=stats(ts),sorted=ts.slice().sort((a,b)=>a.date.localeCompare(b.date));
+ let cum=0,vals=sorted.map(t=>cum+=(+t.r||0));
+ let max=Math.max(1,...vals.map(Math.abs));
+ return `<div class="grid stats">
+ ${metric("Trades",s.n,"dokumentiert")}
+ ${metric("Winrate",f(s.wr)+"%",`${s.w} Wins · ${s.l} Losses`)}
+ ${metric("Netto",f(s.sum)+"R","kumuliertes Ergebnis",s.sum>=0)}
+ ${metric("Expectancy",f(s.exp)+"R","Ø Ergebnis pro Trade",s.exp>=0)}
+ </div>
+ <div class="grid cols">
+ <div class="card"><div class="row between"><h2>Letzte Trades</h2><button data-page="trades">Alle Trades</button></div>
+ ${ts.length?table(ts.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,7)):'<div class="empty">Noch keine Trades erfasst.</div>'}</div>
+ <div class="card"><h2>Weitere Kennzahlen</h2>
+ <p class="row between"><span class="muted">Profit Factor</span><b>${s.pf===Infinity?"∞":f(s.pf)}</b></p>
+ <p class="row between"><span class="muted">Ø Gewinn</span><b class="green">${f(s.w?ts.filter(t=>+t.r>0).reduce((a,t)=>a+(+t.r),0)/s.w:0)}R</b></p>
+ <p class="row between"><span class="muted">Ø Verlust</span><b class="red">${f(s.l?ts.filter(t=>+t.r<0).reduce((a,t)=>a+(+t.r),0)/s.l:0)}R</b></p>
+ <div class="notice warning small">Historische Statistik, keine Vorhersage und keine Garantie.</div>
+ <button class="primary" data-page="new">＋ Trade erfassen</button></div></div>
+ <div class="card" style="margin-top:14px"><h2>Equity-Kurve · kumuliertes R</h2>
+ ${vals.length?`<div class="chart">${vals.slice(-50).map(v=>`<i class="${v<0?"neg":""}" style="height:${Math.max(3,Math.abs(v)/max*100)}%" title="${f(v)}R"></i>`).join("")}</div>`:'<div class="empty">Noch keine Daten.</div>'}</div>`;
+}
+function form(){
+ let t=data.trades.find(x=>x.id===editId)||{};
+ let has=new Set(t.conf||[]),ctx=new Set(t.context||[]);
+ let field=(label,name,type="text",value="")=>`<div class="field"><label>${label}</label><input name="${name}" type="${type}" value="${esc(value)}"></div>`;
+ return `<div class="card"><form id="tradeForm"><div class="formgrid">
+ ${field("Datum","date","date",t.date||new Date().toISOString().slice(0,10))}
+ <div class="field"><label>Konto</label><select name="account">${data.accounts.map(a=>`<option value="${a.id}" ${t.account===a.id?"selected":""}>${esc(a.name)}</option>`).join("")}</select></div>
+ ${field("Markt / Symbol","market","text",t.market||"NASDAQ")}
+ ${field("Session / NY-Zeit","session","text",t.session||"")}
+ ${field("Richtung","direction","text",t.direction||"Long")}
+ ${field("Setup","setup","text",t.setup||"")}
+ ${field("Entry (optional)","entry","number",t.entry||"")}
+ ${field("Stop (optional)","stop","number",t.stop||"")}
+ ${field("Take Profit (optional)","tp","number",t.tp||"")}
+ ${field("Ergebnis in R","r","number",t.r??"0")}
+ ${field("Bias","bias","text",t.bias||"Unklar")}
+ ${field("Risiko geplant (R)","risk","number",t.risk||"1")}
+ </div>
+ <div class="section">Deine Level-Confluences</div>
+ ${groups.map(([g,items])=>`<div class="section">${g}</div><div class="checks">${items.map(i=>`<label class="check"><input type="checkbox" name="conf" value="${esc(i)}" ${has.has(i)?"checked":""}><span>${esc(i)}</span></label>`).join("")}</div>`).join("")}
+ <div class="section">Struktur & Trade-Status</div>
+ <div class="checks">${["HTF Bias bestätigt","5M–15M Struktur bestätigt","1M Entry-Trigger","Reaktion am Level","Opening Times stimmen überein","Regeln eingehalten","No-Fill / hypothetisch"].map(i=>`<label class="check"><input type="checkbox" name="context" value="${i}" ${ctx.has(i)?"checked":""}><span>${i}</span></label>`).join("")}</div>
+ <div class="formgrid" style="margin-top:14px">
+ <div class="field wide"><label>Screenshot-Link (optional)</label><input name="screenshot" value="${esc(t.screenshot||"")}" placeholder="Link zum Chart"></div>
+ <div class="field wide"><label>Notizen / Analyse</label><textarea name="notes">${esc(t.notes||"")}</textarea></div>
+ <div class="field wide"><label>Learning / Verbesserung</label><textarea name="lesson">${esc(t.lesson||"")}</textarea></div>
+ </div>
+ <div class="row" style="margin-top:15px"><button class="primary">Trade speichern</button><button type="button" id="cancel">Abbrechen</button></div>
+ </form></div>`;
+}
+function analytics(){
+ let ts=chosen(),s=stats(ts);
+ let names=[...new Set(ts.flatMap(t=>t.conf||[]))];
+ let rows=names.map(n=>{let x=ts.filter(t=>(t.conf||[]).includes(n)),z=stats(x);return{label:n,...z}}).sort((a,b)=>b.wr-a.wr);
+ let map={};
+ ts.forEach(t=>{let k=(t.conf||[]).slice().sort().join(" + ");if(k)(map[k]||=[]).push(t)});
+ let combos=Object.entries(map).map(([n,x])=>({label:n,...stats(x)})).filter(x=>x.label.includes(" + ")).sort((a,b)=>b.n-a.n);
+ return `<div class="grid stats">
+ ${metric("Stichprobe",s.n,"Trades")}
+ ${metric("Winrate",f(s.wr)+"%","historisch")}
+ ${metric("Expectancy",f(s.exp)+"R","Ø pro Trade")}
+ ${metric("Profit Factor",s.pf===Infinity?"∞":f(s.pf),"historisch")}
+ </div>
+ <div class="notice warning">Historische Trefferquoten sind keine Vorhersage. Kleine Stichproben können stark schwanken. No-Fills/hypothetische Trades getrennt betrachten.</div>
+ <div class="card"><h2>Einzelne Confluences</h2>
+ ${rows.length?`<div class="tablewrap"><table><tr><th>Confluence</th><th>Trades</th><th>Wins</th><th>Winrate</th><th>Ø R</th><th>Netto R</th></tr>
+ ${rows.map(x=>`<tr><td>${esc(x.label)}</td><td>${x.n}</td><td>${x.w}</td><td>${f(x.wr)}%</td><td>${f(x.exp)}R</td><td>${f(x.sum)}R</td></tr>`).join("")}</table></div>`:'<div class="empty">Noch keine Daten.</div>'}</div>
+ <div class="card" style="margin-top:14px"><h2>Kombinationen</h2>
+ ${combos.length?`<div class="tablewrap"><table><tr><th>Kombination</th><th>Trades</th><th>Wins</th><th>Winrate</th><th>Ø R</th><th>Netto R</th></tr>
+ ${combos.map(x=>`<tr><td style="white-space:normal;min-width:220px">${esc(x.label)}</td><td>${x.n}</td><td>${x.w}</td><td>${f(x.wr)}%</td><td>${f(x.exp)}R</td><td>${f(x.sum)}R</td></tr>`).join("")}</table></div>`:'<div class="empty">Noch keine wiederholten Kombinationen.</div>'}</div>`;
+}
+function accounts(){
+ return `<div class="grid cols"><div class="card"><h2>Deine Konten</h2>
+ ${data.accounts.map(a=>`<p class="row between"><span><b>${esc(a.name)}</b> <span class="muted">${esc(a.market)}</span></span><button data-del="${a.id}" ${data.accounts.length===1?"disabled":""}>Löschen</button></p>`).join("")}</div>
+ <div class="card"><h2>Konto hinzufügen</h2><form id="accountForm" class="grid">
+ <div class="field"><label>Name</label><input name="name" required placeholder="z. B. NASDAQ Backtest"></div>
+ <div class="field"><label>Markt</label><input name="market" placeholder="NASDAQ / ES / BTC"></div>
+ <button class="primary">Hinzufügen</button></form></div></div>`;
+}
+function settings(){
+ return `<div class="grid cols"><div class="card"><h2>Backup</h2><p class="muted">JSON sichert Konten und Trades; CSV exportiert Trades.</p>
+ <div class="actions"><button id="json">JSON exportieren</button><button id="csv">CSV exportieren</button><button id="importBtn">JSON importieren</button><input id="import" type="file" accept=".json" hidden></div></div>
+ <div class="card"><h2>Supabase Login & Cloud Sync</h2>
+ <div class="notice">${sb?"Supabase-Verbindung initialisiert.":"Supabase-Bibliothek nicht geladen."}</div>
+ <div class="field"><label>E-Mail</label><input id="email" type="email"></div>
+ <div class="field"><label>Passwort</label><input id="password" type="password"></div>
+ <div class="actions" style="margin-top:10px"><button id="signup" ${!sb?"disabled":""}>Registrieren</button><button id="login" ${!sb?"disabled":""}>Login</button><button id="logout" ${!user?"disabled":""}>Logout</button><button id="sync" ${!user?"disabled":""}>Sync</button></div>
+ <p class="muted small">${user?"Angemeldet: "+esc(user.email):"Nicht angemeldet"}</p></div></div>
+ <div class="card" style="margin-top:14px"><h2>Supabase Setup</h2><ol class="muted">
+ <li>In Supabase SQL Editor die Datei <code>supabase-schema.sql</code> ausführen.</li>
+ <li>Supabase Auth: GitHub-Pages-URL in Site URL und Redirect URLs eintragen.</li>
+ <li>Die Website auf GitHub Pages veröffentlichen.</li></ol>
+ <p class="small muted">Niemals Secret- oder service_role-Keys in die Website eintragen. Cloud-Konten gemäß den Altersbedingungen des Anbieters und gegebenenfalls mit Unterstützung eines Erziehungsberechtigten einrichten.</p></div>`;
+}
+function render(){
+ let title={dashboard:"Dashboard",new:editId?"Trade bearbeiten":"Trade dokumentieren",trades:"Trade-Historie",analytics:"Confluence Analytics",accounts:"Konten",settings:"Einstellungen"}[page];
+ $("#root").innerHTML=`<div class="app"><aside class="side"><div class="brand">EDGE<span>BOOK</span></div>
+ <nav>${[["dashboard","Dashboard"],["new","＋ Trade erfassen"],["trades","Trade-Historie"],["analytics","Analytics"],["accounts","Konten"],["settings","Einstellungen"]].map(([p,n])=>`<button data-page="${p}" class="${p===page?"active":""}">${n}</button>`).join("")}</nav></aside>
+ <main><div class="top"><div><div class="eyebrow">Trading journal workspace</div><h1>${title}</h1></div>
+ <select class="global" id="filter"><option value="all">Alle Konten</option>${data.accounts.map(a=>`<option value="${a.id}" ${filter===a.id?"selected":""}>${esc(a.name)}</option>`).join("")}</select></div>
+ ${({dashboard:dash,new:form,trades:()=>`<div class="card"><div class="row between"><h2>Dokumentierte Trades</h2><button class="primary" data-page="new">＋ Neu</button></div>${chosen().length?table(chosen().slice().sort((a,b)=>b.date.localeCompare(a.date))):'<div class="empty">Noch keine Trades.</div>'}</div>`,analytics,accounts,settings})[page]()}</main></div>`;
+ document.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>{page=b.dataset.page;editId=null;render()});
+ $("#filter").onchange=e=>{filter=e.target.value;render()};
+ document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>{editId=b.dataset.edit;page="new";render()});
+ bind();
+}
+function bind(){
+ let tf=$("#tradeForm");
+ tf?.addEventListener("submit",e=>{
+ e.preventDefault();
+ let fd=new FormData(tf),t=Object.fromEntries(fd.entries());
+ t.conf=fd.getAll("conf");t.context=fd.getAll("context");
+ t.r=Number(t.r);t.risk=Number(t.risk||1);t.id=editId||uid();
+ let i=data.trades.findIndex(x=>x.id===t.id);
+ if(i<0)data.trades.push(t);else data.trades[i]=t;
+ save();editId=null;page="trades";render();if(user)sync();
+ });
+ $("#cancel")?.addEventListener("click",()=>{editId=null;page="trades";render()});
+ $("#accountForm")?.addEventListener("submit",e=>{
+ e.preventDefault();let fd=new FormData(e.target);
+ data.accounts.push({id:uid(),name:fd.get("name"),market:fd.get("market")});
+ save();render();
+ });
+ document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
+ if(data.accounts.length<2)return;
+ if(!confirm("Konto und seine Trades löschen?"))return;
+ data.accounts=data.accounts.filter(a=>a.id!==b.dataset.del);
+ data.trades=data.trades.filter(t=>t.account!==b.dataset.del);
+ save();render();
+ });
+ $("#json")?.addEventListener("click",()=>download("edgebook-backup.json",JSON.stringify(data,null,2),"application/json"));
+ $("#csv")?.addEventListener("click",()=>{
+ let ks=["date","market","setup","direction","bias","r","account","session","conf","context","notes","lesson"];
+ let s=[ks.join(","),...data.trades.map(t=>ks.map(k=>'"'+String(Array.isArray(t[k])?t[k].join("; "):t[k]||"").replace(/"/g,'""')+'"').join(","))].join("\n");
+ download("edgebook-trades.csv",s,"text/csv");
+ });
+ $("#importBtn")?.addEventListener("click",()=>$("#import").click());
+ $("#import")?.addEventListener("change",async e=>{
+ try{
+ let d=JSON.parse(await e.target.files[0].text());
+ if(!d.accounts||!d.trades)throw Error();
+ if(confirm("Lokale Daten durch Backup ersetzen?")){data=d;save();render()}
+ }catch{alert("Backup ungültig")}
+ });
+ $("#signup")?.addEventListener("click",async()=>{
+ let {error}=await sb.auth.signUp({email:$("#email").value,password:$("#password").value});
+ alert(error?.message||"Registrierung gestartet. E-Mail prüfen.");
+ });
+ $("#login")?.addEventListener("click",async()=>{
+ let {data:d,error}=await sb.auth.signInWithPassword({email:$("#email").value,password:$("#password").value});
+ if(error)alert(error.message);else{user=d.user;await sync();render()}
+ });
+ $("#logout")?.addEventListener("click",async()=>{await sb.auth.signOut();user=null;render()});
+ $("#sync")?.addEventListener("click",sync);
+}
+function download(name,s,type){
+ let a=document.createElement("a"),u=URL.createObjectURL(new Blob([s],{type}));
+ a.href=u;a.download=name;a.click();URL.revokeObjectURL(u);
+}
+async function sync(){
+ if(!sb||!user)return;
+ try{
+ let {data:d,error}=await sb.from("edgebook_data").select("payload").eq("user_id",user.id).maybeSingle();
+ if(error)throw error;
+ if(d?.payload){
+ if(confirm("Cloud-Daten laden? OK = Cloud laden, Abbrechen = lokale Daten hochladen.")){
+ data=d.payload;localStorage.setItem("edgebook",JSON.stringify(data));render();return;
+ }}
+ let {error:e}=await sb.from("edgebook_data").upsert({user_id:user.id,payload:data,updated_at:new Date().toISOString()});
+ if(e)throw e;
+ alert("Cloud synchronisiert");
+ }catch(e){alert("Sync-Fehler: "+e.message)}
+}
+
+/* Initialisierung */
+load();
+
+if(CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY && window.supabase){
+ sb=window.supabase.createClient(CONFIG.SUPABASE_URL,CONFIG.SUPABASE_ANON_KEY);
+ sb.auth.getUser().then(({data:d})=>{
+ user=d.user;
+ render();
+ }).catch(error=>{
+ console.error("Supabase-Fehler:",error);
+ render();
+ });
+}
+
+render();
+</script>
+</body>
+</html>
